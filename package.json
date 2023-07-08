@@ -1,0 +1,32 @@
+{
+  "name": "visual",
+  "description": "default_template_value",
+  "repository": {
+    "type": "default_template_value",
+    "url": "default_template_value"
+  },
+  "license": "MIT",
+  "scripts": {
+    "pbiviz": "pbiviz",
+    "start": "pbiviz start",
+    "package": "pbiviz package",
+    "lint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "dependencies": {
+    "@rematch/core": "^2.2.0",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "powerbi-visuals-api": "^5.1.0",
+    "powerbi-visuals-utils-formattingmodel": "5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.1.1",
+    "redux": "^4.2.1"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.4.3",
+    "tslint": "^6.1.3",
+    "tslint-microsoft-contrib": "^4.0.1",
+    "typescript": "4.0.2"
+  }
+}
