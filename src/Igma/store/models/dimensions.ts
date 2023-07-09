@@ -14,9 +14,7 @@ const initialState: IDimensions = {
 export const dimensions = createModel<RootModel>()({
   state: initialState,
   reducers: {
-    update(state, payload: Partial<IDimensions>): IDimensions {
-      console.log('dime', payload);
-      
+    update(state, payload: Partial<IDimensions>): IDimensions {      
       return {
         ...state,
         ...payload,

@@ -2,20 +2,25 @@
   "privileges": [],
   "dataRoles": [
     {
-      "name": "category",
-      "displayName": "Category",
+      "name": "axis",
+      "displayName": "Axis",
       "displayNameKey": "Visual_Category",
-      "kind": "Grouping"
-    },
-    {
-      "name": "Column",
-      "displayName": "Column",
-      "displayNameKey": "Visual_Column",
       "kind": "Grouping"
     },
     {
       "name": "value",
       "displayName": "Value",
+      "displayNameKey": "Visual_Values",
+      "kind": "Measure",
+      "requiredTypes": [
+        {
+          "numeric": true
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "displayName": "Tooltip",
       "displayNameKey": "Visual_Values",
       "kind": "Measure"
     }
@@ -25,12 +30,7 @@
       "matrix": {
         "rows": {
           "for": {
-            "in": "category"
-          }
-        },
-        "columns": {
-          "for": {
-            "in": "Column"
+            "in": "axis"
           }
         },
         "values": {
@@ -39,11 +39,17 @@
               "for": {
                 "in": "value"
               }
+            },
+            {
+              "for": {
+                "in": "tooltip"
+              }
             }
           ]
         }
       }
     }
   ],
-  "objects": {}
+  "objects": {},
+  "supportsHighlight": true
 }

@@ -1,7 +1,10 @@
 import powerbiVisualsApi from "powerbi-visuals-api";
 import VisualConstructorOptions = powerbiVisualsApi.extensibility.visual.VisualConstructorOptions;
 import VisualUpdateOptions = powerbi.extensibility.visual.VisualUpdateOptions;
-import {IDimensions} from './store/models/dimensions';
+import ISelectionManager = powerbi.extensibility.ISelectionManager;
+import IVisualHost = powerbiVisualsApi.extensibility.visual.IVisualHost;
+
+import { IDimensions } from "./store/models/dimensions";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -10,19 +13,22 @@ import { clearDOMNode } from "./utils/common";
 import { Provider, connect } from "react-redux";
 import { IRootState, IDispatch, store } from "./store/store";
 import { DataParser } from "./service/DataParser";
+import { PbiUtils } from "./service/PbiUtils";
 
 export class Igma {
-  static container;
+  private container: HTMLElement;
   private isRendered = false;
+
   constructor(option: VisualConstructorOptions) {
-    Igma.container = option.element;
+    this.container = option.element;
+    PbiUtils.update(option);
     this.render();
   }
 
   render() {
-    clearDOMNode(Igma.container);
+    clearDOMNode(this.container);
     this.isRendered = true;
-    const root = ReactDOM.createRoot(Igma.container);
+    const root = ReactDOM.createRoot(this.container);
     root.render(
       <Provider store={store}>
         <React.StrictMode>
@@ -40,20 +46,25 @@ export class Igma {
     this.updateState(options);
   }
 
-  private updateState(options: VisualUpdateOptions){
+  private updateState(options: VisualUpdateOptions) {
+    console.log("options", options);
+
     this.updateDimension(options.viewport);
-    if(options.dataViews && options.dataViews[0]?.metadata?.columns.length){
+    if (options.dataViews && options.dataViews[0]?.metadata?.columns.length) {
       const metaData = options.dataViews[0]?.metadata;
-      const newMeta = metaData.columns.map(col=>{
-        console.log(col.queryName);
+      const newMeta = metaData.columns.map((col) => {
         return col.queryName;
-      })
-      store.dispatch.count.update({metaData: newMeta});
+      });
+      store.dispatch.count.update({ metaData: newMeta });
+      store.dispatch.chartData.update(DataParser.getChartData());
     }
   }
 
-  private updateDimension(viewport: powerbiVisualsApi.IViewport){
-    const dimension: IDimensions = {height: viewport.height, width: viewport.width};
+  private updateDimension(viewport: powerbiVisualsApi.IViewport) {
+    const dimension: IDimensions = {
+      height: viewport.height,
+      width: viewport.width,
+    };
     store.dispatch.dimensions.update(dimension);
   }
 }

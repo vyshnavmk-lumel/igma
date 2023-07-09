@@ -12,24 +12,16 @@ import IVisual = powerbi.extensibility.visual.IVisual;
 import { VisualFormattingSettingsModel } from "./settings";
 
 export class Visual implements IVisual {
-    private target: HTMLElement;
-    private updateCount: number;
-    private textNode: Text;
     private formattingSettings: VisualFormattingSettingsModel;
     private formattingSettingsService: FormattingSettingsService;
     private chartModule: Igma;
 
     constructor(options: VisualConstructorOptions) {
-       this.chartModule = new Igma(options);
-       console.log('here');
-       
+       this.chartModule = new Igma(options);       
     }
 
     public update(options: VisualUpdateOptions) {
-        console.log('options', options);
-        // this.formattingSettings = this.formattingSettingsService.populateFormattingSettingsModel(VisualFormattingSettingsModel, options.dataViews);
         this.chartModule.update(options);
-        
     }
 
     /**

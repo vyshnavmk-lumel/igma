@@ -7,8 +7,6 @@ import Chart from "./Chart";
 type IChartWrapper = TMapState & TMapDispatch;
 const ChartWrapper = (props: IChartWrapper) => {
   const { dimensions } = props;
-  console.log("dimensions", dimensions);
-
   const [showSideMenu, setSideMenu] = useState(false);
   const toggleSideMenu = () => {
     setSideMenu(!showSideMenu);
