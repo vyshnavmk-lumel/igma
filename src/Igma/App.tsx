@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import ChartWrapper from "./component/chart/ChartWrapper";
 import { IDispatch, IRootState } from "./store/store";
 
 type IApp = TMapState & TMapDispatch;
@@ -7,14 +8,11 @@ const App = (props: IApp) => {
   const { count } = props;
   return (
     <div>
-      Hello World
-      {count.name}
-      {count.metaData.map((meta) => (
-        <p> {meta} </p>
-      ))}
+      <ChartWrapper />
     </div>
   );
 };
+
 const mapState = (state: IRootState) => ({
   count: state.count,
 });

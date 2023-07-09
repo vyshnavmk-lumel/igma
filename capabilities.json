@@ -2,7 +2,7 @@
   "privileges": [],
   "dataRoles": [
     {
-      "name": "Category",
+      "name": "category",
       "displayName": "Category",
       "displayNameKey": "Visual_Category",
       "kind": "Grouping"
@@ -14,8 +14,8 @@
       "kind": "Grouping"
     },
     {
-      "name": "Measure",
-      "displayName": "Measure",
+      "name": "value",
+      "displayName": "Value",
       "displayNameKey": "Visual_Values",
       "kind": "Measure"
     }
@@ -25,7 +25,7 @@
       "matrix": {
         "rows": {
           "for": {
-            "in": "Category"
+            "in": "category"
           }
         },
         "columns": {
@@ -37,7 +37,7 @@
           "select": [
             {
               "for": {
-                "in": "Measure"
+                "in": "value"
               }
             }
           ]
