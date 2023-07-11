@@ -2,6 +2,9 @@ import React, { useRef } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { IconButton } from "@mui/material";
+import { IRootState } from "../../store/store";
+import { useSelector } from "react-redux";
+import { ColorPalletService } from "../../service/ColorPalletService";
 
 interface ISideMenu {
   showSideMenu: boolean;
@@ -9,6 +12,8 @@ interface ISideMenu {
 }
 const SideMenu = (props: ISideMenu) => {
   const { showSideMenu, toggleSideMenu } = props;
+  const theme = useSelector((state: IRootState) => state.colorPallet.theme);
+  const { backgroundColor, buttonBackground } = ColorPalletService.getColorPallet().sideMenu;
   const sideMenuOpenRef = useRef<HTMLDivElement>(null);
 
   const highlightIcon = () => {
@@ -17,9 +22,6 @@ const SideMenu = (props: ISideMenu) => {
   const removeHighlight = () => {
     sideMenuOpenRef.current.style.opacity = "0.3";
   };
-  const backgroundColor = "#3e1d95";
-  const fontColor = "#c6c1e1";
-  const btnBg = "#a092cb";
   const sideMenuWrapStyle: React.CSSProperties = {
     width: showSideMenu ? "220px" : "0",
     background: backgroundColor,
@@ -42,7 +44,7 @@ const SideMenu = (props: ISideMenu) => {
           <button
             className="sideMenuCloser"
             onClick={toggleSideMenu}
-            style={{ background: btnBg }}
+            style={{ background: buttonBackground }}
           >
             <KeyboardArrowLeftIcon fontSize="large" style={{ color: "#fff" }} />
           </button>

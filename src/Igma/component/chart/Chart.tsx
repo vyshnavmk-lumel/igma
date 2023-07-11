@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import chroma from "chroma-js";
 import {
   XAxis,
   YAxis,
@@ -11,6 +12,7 @@ import {
   Legend,
 } from "recharts";
 import { barChartData } from "../../sample/data";
+import { ColorPalletService } from "../../service/ColorPalletService";
 import { DataParser } from "../../service/DataParser";
 import { PbiUtils } from "../../service/PbiUtils";
 import { IDispatch, IRootState } from "../../store/store";
@@ -23,8 +25,13 @@ const Chart = (props: IChart) => {
   const valueMeasures = DataParser.valueMeasures;
   const showSampleData = false;
   const data = chartData;
+  const {backgroundColor} = ColorPalletService.getColorPallet().chart;
+  const disabledBackground = chroma(backgroundColor).alpha(0.5).hex();
+  const defaultColor = PbiUtils.isHighlightApplied ? disabledBackground : backgroundColor;
   const handleSelection =
     (selectionId: powerbi.visuals.ISelectionIdBuilder) => () => {
+      console.log('selectionId', selectionId);
+      
       PbiUtils.selectionManager.select(selectionId);
     };
   return (
@@ -50,7 +57,7 @@ const Chart = (props: IChart) => {
             onClick={handleSelection(data[measureIndex].selectionId)}
             label={measure.displayName}
             dataKey={measure.queryName}
-            fill="#8884d8"
+            fill={defaultColor}
           />
         ))}
       </BarChart>

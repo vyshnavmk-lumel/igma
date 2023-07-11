@@ -14,6 +14,7 @@ import { Provider, connect } from "react-redux";
 import { IRootState, IDispatch, store } from "./store/store";
 import { DataParser } from "./service/DataParser";
 import { PbiUtils } from "./service/PbiUtils";
+import { ColorPalletService } from "./service/ColorPalletService";
 
 export class Igma {
   private container: HTMLElement;
@@ -57,6 +58,8 @@ export class Igma {
       });
       store.dispatch.count.update({ metaData: newMeta });
       store.dispatch.chartData.update(DataParser.getChartData());
+      const state = store.getState();
+      ColorPalletService.updateTheme(state.colorPallet.theme);
     }
   }
 

@@ -8,6 +8,7 @@ export class PbiUtils {
   public static visualHost: IVisualHost;
   public static selectionManager: ISelectionManager;
   public static container: HTMLElement;
+  public static isHighlightApplied: boolean;
   public static update(option: VisualConstructorOptions) {
     this.visualHost = option.host;
     this.container = option.element;

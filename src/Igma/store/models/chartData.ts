@@ -5,6 +5,7 @@ import { RootModel } from ".";
 export interface IChartData {
   xAxis: string;
   selectionId: powerbiVisualsApi.visuals.ISelectionIdBuilder;
+  isHighlighted?: boolean;
   [key: string]: any;
 }
 const initialState: IChartData[] = [];

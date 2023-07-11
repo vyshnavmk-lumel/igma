@@ -15,9 +15,6 @@ export class DataParser {
     this.valueMeasures = [];
     this.dimensions = [];
     this.chartData = [];
-    // this.axisValues = [];
-    // this.valueSource = [];
-    // this.xAxisObj = {};
 
     const dataViews = options.dataViews;
     if (dataViews && dataViews[0]) {
@@ -47,8 +44,13 @@ export class DataParser {
       const yValues = row.values;
       const data: IChartData = { xAxis, selectionId };
       this.valueMeasures.forEach((measure, measureIndex) => {
-        const yValue = yValues[measureIndex]?.value as number;
+        const currentValue = yValues[measureIndex];
+        const yValue = currentValue?.value as number;
         data[measure.queryName] = yValue;
+        if (currentValue?.highlight) {
+          data.isHighlighted = true;
+          PbiUtils.isHighlightApplied = true;
+        }
       });
       this.chartData.push(data);
     });

@@ -6,7 +6,7 @@ type TQuestion = {
   title: string;
 };
 
-interface ICountState {
+export interface ICountState {
   questions: Array<TQuestion>;
   questionType: TQuestionType;
   name: string;
