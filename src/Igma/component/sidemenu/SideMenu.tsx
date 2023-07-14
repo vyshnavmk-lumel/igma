@@ -1,19 +1,21 @@
 import React, { useRef } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { IconButton } from "@mui/material";
-import { IRootState } from "../../store/store";
-import { useSelector } from "react-redux";
+import { NumberSize, Resizable } from "re-resizable";
 import { ColorPalletService } from "../../service/ColorPalletService";
+import { Direction } from "re-resizable/lib/resizer";
 
 interface ISideMenu {
   showSideMenu: boolean;
+  sideMenuWidth: number;
   toggleSideMenu: () => void;
+  setSideMenuWidth: (sideMenuWidth: number) => void;
 }
 const SideMenu = (props: ISideMenu) => {
-  const { showSideMenu, toggleSideMenu } = props;
-  const theme = useSelector((state: IRootState) => state.colorPallet.theme);
-  const { backgroundColor, buttonBackground } = ColorPalletService.getColorPallet().sideMenu;
+  const { showSideMenu, toggleSideMenu, sideMenuWidth, setSideMenuWidth } =
+    props;
+  const { backgroundColor, buttonBackground } =
+    ColorPalletService.getColorPallet().sideMenu;
   const sideMenuOpenRef = useRef<HTMLDivElement>(null);
 
   const highlightIcon = () => {
@@ -23,8 +25,19 @@ const SideMenu = (props: ISideMenu) => {
     sideMenuOpenRef.current.style.opacity = "0.3";
   };
   const sideMenuWrapStyle: React.CSSProperties = {
-    width: showSideMenu ? "220px" : "0",
+    width: showSideMenu ? "100%" : 0,
     background: backgroundColor,
+  };
+  const handleResize = (
+    event: MouseEvent | TouchEvent,
+    direction: Direction,
+    elementRef: HTMLElement,
+    delta: NumberSize
+  ) => {
+    setSideMenuWidth(sideMenuWidth + delta.width);
+  };
+  const sideMenuContainerStyle: React.CSSProperties = {
+    borderRight: showSideMenu ? "solid 6px transparent" : "none",
   };
   return (
     <>
@@ -39,18 +52,33 @@ const SideMenu = (props: ISideMenu) => {
           <KeyboardArrowRightIcon fontSize="large" />
         </div>
       )}
-      <aside className="sideMenuWrap" style={sideMenuWrapStyle}>
-        {showSideMenu && (
-          <button
-            className="sideMenuCloser"
-            onClick={toggleSideMenu}
-            style={{ background: buttonBackground }}
-          >
-            <KeyboardArrowLeftIcon fontSize="large" style={{ color: "#fff" }} />
-          </button>
-        )}
-      </aside>
-      ;
+      <Resizable
+        className="sideMenuContainer"
+        style={sideMenuContainerStyle}
+        size={{
+          width: sideMenuWidth,
+          height: "100vh",
+        }}
+        enable={{ right: true }}
+        onResizeStop={handleResize}
+        minWidth={showSideMenu ? 100 : 0}
+        maxWidth={400}
+      >
+        <aside className="sideMenuWrap" style={sideMenuWrapStyle}>
+          {showSideMenu && (
+            <button
+              className="sideMenuCloser"
+              onClick={toggleSideMenu}
+              style={{ background: buttonBackground }}
+            >
+              <KeyboardArrowLeftIcon
+                fontSize="large"
+                style={{ color: "#fff" }}
+              />
+            </button>
+          )}
+        </aside>
+      </Resizable>
     </>
   );
 };

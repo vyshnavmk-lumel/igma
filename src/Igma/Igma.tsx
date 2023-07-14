@@ -58,6 +58,7 @@ export class Igma {
       });
       store.dispatch.count.update({ metaData: newMeta });
       store.dispatch.chartData.update(DataParser.getChartData());
+      const hasSelection = PbiUtils.selectionManager.hasSelection();
       const state = store.getState();
       ColorPalletService.updateTheme(state.colorPallet.theme);
     }
