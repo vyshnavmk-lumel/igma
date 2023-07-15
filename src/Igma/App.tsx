@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import ChartWrapper from "./component/chart/ChartWrapper";
+import Visual from "./component/chart/Visual";
 import { IDispatch, IRootState } from "./store/store";
 
 type IApp = TMapState & TMapDispatch;
@@ -8,7 +8,7 @@ const App = (props: IApp) => {
   const { count } = props;
   return (
     <div>
-      <ChartWrapper />
+      <Visual />
     </div>
   );
 };

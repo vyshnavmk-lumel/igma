@@ -4,23 +4,25 @@ import VisualUpdateOptions = powerbi.extensibility.visual.VisualUpdateOptions;
 import ISelectionManager = powerbi.extensibility.ISelectionManager;
 import IVisualHost = powerbiVisualsApi.extensibility.visual.IVisualHost;
 
-import { IDimensions } from "./store/models/dimensions";
+import {IDimensions} from "./store/models/dimensions";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { clearDOMNode } from "./utils/common";
-import { Provider, connect } from "react-redux";
-import { IRootState, IDispatch, store } from "./store/store";
-import { DataParser } from "./service/DataParser";
-import { PbiUtils } from "./service/PbiUtils";
-import { ColorPalletService } from "./service/ColorPalletService";
+import {clearDOMNode} from "./utils/common";
+import {Provider, connect} from "react-redux";
+import {IRootState, IDispatch, store} from "./store/store";
+import {DataParser} from "./service/DataParser";
+import {PbiUtils} from "./service/PbiUtils";
+import {ColorPalletService} from "./service/ColorPalletService";
 
 export class Igma {
   private container: HTMLElement;
   private isRendered = false;
 
   constructor(option: VisualConstructorOptions) {
+    console.log("construcor", option);
+
     this.container = option.element;
     PbiUtils.update(option);
     this.render();
@@ -35,7 +37,7 @@ export class Igma {
         <React.StrictMode>
           <App />
         </React.StrictMode>
-      </Provider>
+      </Provider>,
     );
   }
 
@@ -48,16 +50,33 @@ export class Igma {
   }
 
   private updateState(options: VisualUpdateOptions) {
-    console.log("options", options);
-
+    if (!DataParser.isValueExist || !DataParser.isAxisExist) {
+      if (!DataParser.isValueExist && !DataParser.isAxisExist) {
+        store.dispatch.visualMetaData.update({
+          showLandingPage: true,
+          showWarningMessage: false,
+        });
+      } else {
+        store.dispatch.visualMetaData.update({
+          showLandingPage: false,
+          showWarningMessage: true,
+        });
+      }
+    } else {
+      store.dispatch.visualMetaData.update({
+        showLandingPage: false,
+        showWarningMessage: false,
+      });
+    }
     this.updateDimension(options.viewport);
     if (options.dataViews && options.dataViews[0]?.metadata?.columns.length) {
       const metaData = options.dataViews[0]?.metadata;
       const newMeta = metaData.columns.map((col) => {
         return col.queryName;
       });
-      store.dispatch.count.update({ metaData: newMeta });
+      store.dispatch.count.update({metaData: newMeta});
       store.dispatch.chartData.update(DataParser.getChartData());
+
       const hasSelection = PbiUtils.selectionManager.hasSelection();
       const state = store.getState();
       ColorPalletService.updateTheme(state.colorPallet.theme);

@@ -1,10 +1,23 @@
 .chartWrapper {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 .sideMenuOpener {
-  position: fixed;
-  left: 0;
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 99;
+}
+
+.chartContainer{
+  position: relative;
+}
+
+.annotationCanvas{
+  position: absolute;
   top: 0;
-  z-index: 99;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  cursor: crosshair;
 }

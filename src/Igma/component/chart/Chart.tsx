@@ -1,16 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import chroma from "chroma-js";
-import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Legend,
-} from "recharts";
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from "recharts";
 import { barChartData } from "../../sample/data";
 import { ColorPalletService } from "../../service/ColorPalletService";
 import { DataParser } from "../../service/DataParser";
@@ -25,15 +16,14 @@ const Chart = (props: IChart) => {
   const valueMeasures = DataParser.valueMeasures;
   const showSampleData = false;
   const data = chartData;
-  const {backgroundColor} = ColorPalletService.getColorPallet().chart;
+  const { backgroundColor } = ColorPalletService.getColorPallet().chart;
   const disabledBackground = chroma(backgroundColor).alpha(0.5).hex();
   const defaultColor = PbiUtils.isHighlightApplied ? disabledBackground : backgroundColor;
-  const handleSelection =
-    (selectionId: powerbi.visuals.ISelectionIdBuilder) => () => {
-      console.log('selectionId', selectionId);
-      
-      PbiUtils.selectionManager.select(selectionId);
-    };
+  const handleSelection = (selectionId: powerbi.visuals.ISelectionIdBuilder) => () => {
+    console.log("selectionId", selectionId);
+
+    PbiUtils.selectionManager.select(selectionId);
+  };
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart

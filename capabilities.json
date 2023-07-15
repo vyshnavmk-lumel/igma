@@ -51,5 +51,6 @@
     }
   ],
   "objects": {},
-  "supportsHighlight": true
+  "supportsHighlight": true,
+  "supportsLandingPage": true
 }

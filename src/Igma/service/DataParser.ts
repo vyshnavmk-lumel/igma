@@ -1,19 +1,25 @@
 import powerbiVisualsApi from "powerbi-visuals-api";
 import VisualUpdateOptions = powerbi.extensibility.visual.VisualUpdateOptions;
 import ISelectionManager = powerbi.extensibility.ISelectionManager;
-import { IChartData } from "../store/models/chartData";
-import { PbiUtils } from "./PbiUtils";
+import {IChartData} from "../store/models/chartData";
+import {PbiUtils} from "./PbiUtils";
 
 export class DataParser {
   public static valueMeasures: powerbiVisualsApi.DataViewMetadataColumn[];
-  private static dimensions: powerbiVisualsApi.DataViewMetadataColumn[];
+  private static axisDimensions: powerbiVisualsApi.DataViewMetadataColumn[];
   private static chartData: IChartData[];
   private static rows: powerbiVisualsApi.DataViewMatrixNode[];
   private static levels: powerbiVisualsApi.DataViewHierarchyLevel[];
+  public static isValueExist: boolean;
+  public static isAxisExist: boolean;
 
   public static update(options: VisualUpdateOptions) {
+    console.log("dataParser");
+
+    this.isValueExist = false;
+    this.isAxisExist = false;
     this.valueMeasures = [];
-    this.dimensions = [];
+    this.axisDimensions = [];
     this.chartData = [];
 
     const dataViews = options.dataViews;
@@ -27,9 +33,11 @@ export class DataParser {
         const columns = options.dataViews[0].metadata.columns;
         columns.forEach((column) => {
           if (column.roles["value"]) {
+            this.isValueExist = true;
             this.valueMeasures.push(column);
-          } else if (column.roles["category"]) {
-            this.dimensions.push(column);
+          } else if (column.roles["axis"]) {
+            this.isAxisExist = true;
+            this.axisDimensions.push(column);
           }
         });
       }
@@ -42,7 +50,7 @@ export class DataParser {
       const selectionId = this.createSelection(row);
       const xAxis = String(row.value);
       const yValues = row.values;
-      const data: IChartData = { xAxis, selectionId };
+      const data: IChartData = {xAxis, selectionId};
       this.valueMeasures.forEach((measure, measureIndex) => {
         const currentValue = yValues[measureIndex];
         const yValue = currentValue?.value as number;
@@ -61,8 +69,6 @@ export class DataParser {
   }
 
   private static createSelection(node: powerbi.DataViewMatrixNode) {
-    return PbiUtils.visualHost
-      .createSelectionIdBuilder()
-      .withMatrixNode(node, this.levels);
+    return PbiUtils.visualHost.createSelectionIdBuilder().withMatrixNode(node, this.levels);
   }
 }
